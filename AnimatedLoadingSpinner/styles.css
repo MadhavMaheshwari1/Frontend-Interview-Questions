@@ -28,6 +28,8 @@ body {
     justify-content: center;
     overflow: hidden;
     position: relative;
+    font-size: 2rem;
+    animation: textAnimation 2s ease-in-out infinite alternate;
 }
 
 .spinner--sector {
@@ -35,22 +37,52 @@ body {
     height: 100%;
     position: absolute;
     border-radius: 50%;
-    border-width: 10px; /* Set the width */
-    border-style: solid; /* Set the style */
-    border-color: transparent; /* Make other sides transparent */
+    border-width: 15px;
+    border-style: solid;
+    border-color: transparent;
+    mix-blend-mode: overlay;
+    animation: rotate var(--duration) var(--timing) infinite alternate;
+    pointer-events: none;
 }
 
 .spinner--color--greenyellow {
     border-top-color: greenyellow;
+    --duration: 2s;
+    --timing: cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .spinner--color--yellow {
-    border-left-color: yellow;
-}
-.spinner--color--green {
-    border-bottom-color: green;
+    border-right-color: yellow;
+    --duration: 1.8s;
+    --timing: cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .spinner--color--lightcoral {
-    border-right-color: lightcoral;
+    border-bottom-color: lightcoral;
+    --duration: 1.5s;
+    --timing: cubic-bezier(0.39, 0.58, 0.57, 1);
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes textAnimation {
+    0% {
+        color: rgba(0, 0, 0, 1);
+    }
+
+    50% {
+        color: rgba(0, 0, 0, .5);
+    }
+
+    100% {
+        color: rgba(0, 0, 0, 0);
+    }
 }
