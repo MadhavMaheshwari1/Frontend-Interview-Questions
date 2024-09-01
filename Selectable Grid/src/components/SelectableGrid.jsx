@@ -1,72 +1,68 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useCallback, useState } from 'react';
+
 const SelectableGrid = ({ rows = 10, cols = 10 }) => {
     const [grid, setGrid] = useState(Array.from({ length: rows * cols }, (_, index) => index + 1));
     const [selectedBoxes, setSelectedBoxes] = useState([]);
-    const [isSelected, setIsSelected] = useState(false);
+    const [isSelecting, setIsSelecting] = useState(false);
+    const [startBox, setStartBox] = useState(null); // Track the starting box for selection
 
     // Handle mouse down to enable selection
     const handleMouseDown = (boxNumber) => {
+        setStartBox(boxNumber);
         setSelectedBoxes([boxNumber]);
-        setIsSelected(true);
+        setIsSelecting(true);
     };
 
     // Handle mouse up to disable selection
     const handleMouseUp = () => {
-        setIsSelected(false);
+        setIsSelecting(false);
+        setStartBox(null); // Reset start box
     };
 
-    // Handle mouse enter to update hovered index
     const handleMouseEnter = useCallback((boxNumber) => {
-        if (isSelected) {
-            const startBox = selectedBoxes[0];
-            const endBox = boxNumber;
+        if (isSelecting && startBox !== null) {
+            const start = Math.min(startBox, boxNumber);
+            const end = Math.max(startBox, boxNumber);
 
-            const startRow = (startBox - 1) / cols;
-            const endRow = (endBox - 1) / cols;
-            const startCol = (startBox - 1) % cols;
-            const endCol = (endBox - 1) % cols;
+            const startRow = Math.floor((start - 1) / cols);
+            const endRow = Math.floor((end - 1) / cols);
+            const startCol = (start - 1) % cols;
+            const endCol = (end - 1) % cols;
 
             const minRow = Math.min(startRow, endRow);
             const minCol = Math.min(startCol, endCol);
-            const maxRow = Math.min(startRow, endRow);
-            const maxCol = Math.min(startCol, endCol);
+            const maxRow = Math.max(startRow, endRow);
+            const maxCol = Math.max(startCol, endCol);
 
             let selected = [];
 
             for (let i = minRow; i <= maxRow; i++) {
                 for (let j = minCol; j <= maxCol; j++) {
-                    selected.push(i * j + 1);
+                    selected.push(i * cols + j + 1);
                 }
             }
-            setIsSelected(selected);
-        }
-    }, [isSelected]);
 
-    // Handle mouse leave to reset hovered index
-    const handleMouseLeave = () => {
-        setHoveredIndex(null);
-    };
+            setSelectedBoxes(selected);
+        }
+    }, [isSelecting, startBox, cols]);
 
     return (
         <div
-            className='Container mx-auto grid grid-cols-10 gap-1 select-none'
+            className={`Container mx-auto grid gap-1 select-none`}
+            style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
+            onMouseUp={handleMouseUp} // Moved to div level
         >
             {
-                grid.map((gridItem, index) => {
-                    return (
-                        <div
-                            key={index}
-                            className='flex justify-center items-center border-2 border-black '
-                            onMouseEnter={() => handleMouseEnter(index + 1)}
-                            onMouseDown={() => handleMouseDown(index + 1)}
-                            onMouseUp={handleMouseUp}
-                            onMouseLeave={handleMouseLeave}
-                        >
-                            {gridItem}
-                        </div>
-                    );
-                })
+                grid.map((gridItem, index) => (
+                    <div
+                        key={index}
+                        className={`flex justify-center items-center border-2 border-black ${selectedBoxes.includes(index + 1) ? "selected" : ""}`}
+                        onMouseEnter={() => handleMouseEnter(index + 1)}
+                        onMouseDown={() => handleMouseDown(index + 1)}
+                    >
+                        {gridItem}
+                    </div>
+                ))
             }
         </div>
     );
