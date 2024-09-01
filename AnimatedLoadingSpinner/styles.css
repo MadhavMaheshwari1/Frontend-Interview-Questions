@@ -12,6 +12,8 @@ body {
     height: 100vh;
 }
 
+/* Spinner 1 */
+
 .box {
     width: 100%;
     height: 100%;
@@ -84,5 +86,60 @@ body {
 
     100% {
         color: rgba(0, 0, 0, 0);
+    }
+}
+
+/* Spinner 2 */
+
+section {
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.loader {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size:2rem;
+}
+
+.loader span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block !important;
+    transform: rotate(calc(30deg * var(--i)));
+}
+
+.loader span::before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 0;
+    left: 0;
+    background-color: black;
+    border-radius: 50%;
+}
+
+.rotate {
+    animation: animate 3s ease-out infinite;
+    animation-delay: calc(-.1s * var(--i))
+}
+
+@keyframes animate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
     }
 }
