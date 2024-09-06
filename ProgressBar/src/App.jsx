@@ -1,10 +1,11 @@
 import './App.css'
+import ProgressBar from './components/ProgressBar'
 
 function App() {
 
   return (
     <>
-      <h1 className='text-6xl text-blue-400'>Hello World</h1>
+      <ProgressBar />
     </>
   )
 }
