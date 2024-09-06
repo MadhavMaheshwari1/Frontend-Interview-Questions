@@ -5,7 +5,7 @@ function App() {
 
   return (
     <>
-      <ProgressBar />
+      <ProgressBar Progress={25} />
     </>
   )
 }
