@@ -5,7 +5,7 @@ function App() {
 
   return (
     <div className="App">
-      <HomePage itemsPerPage={20}/>
+      <HomePage itemsPerPage={10}/>
     </div>
   )
 }
