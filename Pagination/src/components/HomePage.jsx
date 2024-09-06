@@ -55,7 +55,7 @@ const HomePage = ({ itemsPerPage }) => {
             </div>
             <div>
               <h1>Name: {product.title}</h1>
-              <p>Description: {product.description}</p>
+              <p>Description: {product.description}</p> 
               <h1>Price: Rs {product.price}</h1>
             </div>
           </div>)
