@@ -8,6 +8,7 @@ const HomePage = ({ itemsPerPage }) => {
   const [buttons, setButtons] = useState([]);
   const [startButtonRange, setStartButtonRange] = useState(0);
   const [endButtonRange, setEndButtonRange] = useState(3);
+  const [next, setNext] = useState(false);
 
   const [startRange, setStartRange] = useState(1);
   const [endRange, setEndRange] = useState(itemsPerPage);
@@ -24,10 +25,12 @@ const HomePage = ({ itemsPerPage }) => {
 
   const pageHelper = (next) => {
     if (next) {
-      setEndButtonRange((endButtonRange) => endButtonRange + 1);
-      setStartButtonRange((startButtonRange) => startButtonRange + 1);
+      setNext(true);
+      setEndButtonRange((endButtonRange) => (endButtonRange + 1));
+      setStartButtonRange((startButtonRange) => (startButtonRange + 1));
     }
     else {
+      setNext(false);
       setEndButtonRange((endButtonRange) => endButtonRange - 1);
       setStartButtonRange((startButtonRange) => startButtonRange - 1);
     }
@@ -43,7 +46,12 @@ const HomePage = ({ itemsPerPage }) => {
   }, [])
 
   useEffect(() => {
-    pageHandler(endButtonRange);
+    if (next) {
+      pageHandler(startButtonRange);
+    }
+    else {
+      pageHandler(startButtonRange);
+    }
   }, [startButtonRange, endButtonRange])
 
   useEffect(() => {
@@ -84,7 +92,7 @@ const HomePage = ({ itemsPerPage }) => {
             ) : null
           ))
         }
-        {endRange !== products.length ? <button className='text-3xl' onClick={() => pageHelper(true)}>Next</button> : null}
+        {endButtonRange < (Math.ceil(products.length / itemsPerPage) - 1) ? <button className='text-3xl' onClick={() => pageHelper(true)}>Next</button> : null}
       </div>
     </div>
   )
